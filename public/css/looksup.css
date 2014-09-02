@@ -1,0 +1,128 @@
+/* Chosen v1.1.0 | (c) 2011-2013 by Harvest | MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md */
+
+.looksup-container {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 13px;
+    zoom: 1;
+    *display: inline;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    min-height: 30px;
+}
+
+
+
+.looksup-container a {
+    cursor: pointer
+}
+
+.looksup-container-multi .looksup-choices {
+    position: relative;
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto!important;
+    height: 1%;
+    min-height: inherit;
+    border: 1px solid #aaa;
+    background-color: #fff;
+    background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(1%,#eee),color-stop(15%,#fff));
+    background-image: -webkit-linear-gradient(#eee 1%,#fff 15%);
+    background-image: -moz-linear-gradient(#eee 1%,#fff 15%);
+    background-image: -o-linear-gradient(#eee 1%,#fff 15%);
+    background-image: linear-gradient(#eee 1%,#fff 15%);
+    border-radius: 4px;
+    /*cursor: text*/
+}
+
+.looksup-container-multi .looksup-choices li {
+    float: left;
+    list-style: none
+}
+
+.looksup-container-multi .looksup-choices li.search-field {
+    margin: 0;
+    padding: 0;
+    white-space: nowrap
+}
+
+.looksup-container-multi .looksup-choices li.search-field input[type=text] {
+    margin: 1px 0;
+    padding: 5px;
+    height: 15px;
+    outline: 0;
+    border: 0!important;
+    background: transparent!important;
+    box-shadow: none;
+    color: #666;
+    font-size: 100%;
+    font-family: sans-serif;
+    line-height: normal;
+    border-radius: 0
+}
+
+.looksup-container-multi .looksup-choices li.search-field .default {
+    color: #999
+}
+
+.looksup-container-multi .looksup-choices li.search-choice {
+    position: relative;
+    margin: 3px 0 3px 5px;
+    padding: 3px 20px 3px 5px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    background-color: #e4e4e4;
+    background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(20%,#f4f4f4),color-stop(50%,#f0f0f0),color-stop(52%,#e8e8e8),color-stop(100%,#eee));
+    background-image: -webkit-linear-gradient(#f4f4f4 20%,#f0f0f0 50%,#e8e8e8 52%,#eee 100%);
+    background-image: -moz-linear-gradient(#f4f4f4 20%,#f0f0f0 50%,#e8e8e8 52%,#eee 100%);
+    background-image: -o-linear-gradient(#f4f4f4 20%,#f0f0f0 50%,#e8e8e8 52%,#eee 100%);
+    background-image: linear-gradient(#f4f4f4 20%,#f0f0f0 50%,#e8e8e8 52%,#eee 100%);
+    background-clip: padding-box;
+    box-shadow: 0 0 2px #fff inset,0 1px 0 rgba(0,0,0,.05);
+    color: #333;
+    line-height: 13px;
+    cursor: default
+}
+
+.looksup-container-multi .looksup-choices li.search-choice .search-choice-close {
+    position: absolute;
+    top: 4px;
+    right: 3px;
+    display: block;
+    width: 12px;
+    height: 12px;
+    background: url(chosen-sprite.png) -42px 1px no-repeat;
+    font-size: 1px
+}
+
+.looksup-container-multi .looksup-choices li.search-choice .search-choice-close:hover {
+    background-position: -42px -10px
+}
+
+
+.looksup-container-multi .looksup-choices li.search-choice-focus {
+    background: #d4d4d4
+}
+
+.looksup-container-multi .looksup-choices li.search-choice-focus .search-choice-close {
+    background-position: -42px -10px
+}
+
+.looksup-container-active .looksup-choices li.search-field input[type=text] {
+    color: #111!important
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio:2),only screen and (min-resolution:144dpi) {
+    .looksup-rtl .looksup-search input[type=text],.looksup-container-single .looksup-single abbr,.looksup-container-single .looksup-single div b,.looksup-container-single .looksup-search input[type=text],.looksup-container-multi .looksup-choices .search-choice .search-choice-close,.looksup-container .looksup-results-scroll-down span,.looksup-container .looksup-results-scroll-up span {
+        background-image: url(chosen-sprite@2x.png)!important;
+        background-size: 52px 37px!important;
+        background-repeat: no-repeat!important
+    }
+}

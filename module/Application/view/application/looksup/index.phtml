@@ -1,0 +1,119 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Bob
+ * Date: 14-7-30
+ * Time: 上午10:03
+ */
+
+
+$this->headLink()->appendStylesheet($this->basePath().'/css/tablesorter.css');
+
+$this->headScript()->appendFile($this->basePath()  . '/js/jquery.tablesorter.min.js');
+
+
+?>
+    <style>
+        .wrapper{
+            width: auto;
+        }
+        .width8
+        {
+            width: 650px;
+        }
+    </style>
+    <script>
+        $(document).ready(function(){
+
+            $(".selectedItem").click(function(){
+                var obj_looksup = $('#<?php echo preg_replace("/[^a-zA-Z]+/", "", $this->obj);?>', window.parent.document);
+                var tinyBox_close = $('#closeDialog', window.parent.document);
+
+                var li_html = '<li class="search-choice">'+
+                    '<span>'+$(this).attr('showContent')+'</span>'+
+                    '<a class="search-choice-close" data-option-array-index="1"></a>'+
+                    '<input name="<?php echo $this->obj?>[]" value="'+$(this).attr('objectId')+'" type="hidden"/>'+
+                    '</li>';
+                $(obj_looksup).append(li_html);
+
+
+                $(tinyBox_close).trigger("click");
+            });
+        });
+    </script>
+    <style>
+        .showDetails{
+            background-image: url("/img/icons/button_profile.gif");
+            background-repeat: no-repeat;
+            padding-left: 0px !important;
+            left: 2px !important;
+            height: 22px;
+            width: 90px;
+            cursor:hand !important;
+            text-align: center;
+
+            line-height: 22px;
+
+        }
+        fieldset,.tableBorder{
+            width: 600px!important;
+        }
+        fieldset
+        {
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+    <base target="_self">
+    <br/>
+<?php
+echo $this->form()->render($form);
+if(true || $this->data){
+    ?>
+    <table class="tablesorter" style='width:600px'>
+        <thead>
+        <tr>
+            <?php 	foreach($this->table['Title'] as $title):?>
+                <th><?=$title?></th>
+            <?php endforeach;?>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        if($this->data){
+            foreach($this->data as $data):?>
+                <tr >
+                    <?php
+                        $i=0;
+                        foreach($this->table['Data'] as $fieldName):
+                            if($i == 0)
+                                $content ="<div  class='showDetails'>".$data[$fieldName]."</div>";
+                            else
+                                $content =$data[$fieldName];
+                    ?>
+                            <td objectId = "<?php echo $data[$this->table['Id']];?>" class="selectedItem"  showContent="<?=$data[$this->table['ShowContent']]?>"><?php echo $content?></td>
+
+                    <?php
+                            $i++;
+                        endforeach;
+                    ?>
+                </tr>
+            <?php endforeach;
+        }
+//        else
+//        {
+//            echo "<tr><td>No Result</td></tr>";
+//        }
+
+        ?>
+
+        </tbody>
+    </table>
+<?php
+}
+else
+{
+     echo "No Result";
+}
+
+?>

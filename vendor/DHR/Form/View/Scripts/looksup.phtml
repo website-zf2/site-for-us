@@ -1,0 +1,46 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Bob
+ * Date: 14-6-24
+ * Time: 上午9:24
+ */
+$attributes = $element->getAttributes();
+$message = $element->getMessages();
+$options = $element->getOptions();
+$values = $element->getValue();
+
+
+?>
+
+<div class="looksup-container looksup-container-multi looksup_obj" style="width: 250px;" title="" controller="<?php echo $options['controller']?>" objid="<?php echo $attributes['name']?>">
+    <ul class="looksup-choices" id="<?php echo preg_replace("/[^a-zA-Z]+/", "", $attributes['name']);?>">
+        <?php
+        if(!empty($values))
+        {
+            if($options['controller'] == "product")
+            {
+                $db_products = new \Application\Model\DbTable\Product();
+                $result = $db_products->getRecordsByProductInnerIds($values);
+                if($result)
+                foreach($result as $value)
+                    $records[$value['ProductInnerId']] = $value['ProductName'];
+            }
+            if($records)
+            foreach($records as $key=>$value)
+            {
+                $showContent = $value;
+                $objectInnerId = $key;
+               echo '<li class="search-choice">'.
+                '<span>'.$showContent.'</span>'.
+                '<a class="search-choice-close" data-option-array-index="1"></a>'.
+                '<input name="'.$attributes['name'].'[]" value="'.$objectInnerId.'" type="hidden"/>'.
+                '</li>';
+            }
+        }
+        ?>
+    </ul>
+</div>
+
+<!--<input type="text" name="--><?php //echo $attributes['name']?><!--" id="--><?php //echo $attributes['name']?><!--" class="looksup_input" controller="--><?php //echo $options['controller']?><!--"/>-->
+<div class="looksup"></div>

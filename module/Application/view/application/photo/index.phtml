@@ -1,0 +1,285 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Bob
+ * Date: 14-8-21
+ * Time: 下午2:32
+ */
+$this->headLink()->prependStylesheet($this->basePath() . '/css/jquery.Jcrop.css')
+    ->prependStylesheet($this->basePath() . '/css/backend.css');
+//add js
+$this->headScript()->prependFile('/js/jquery.Jcrop.js');
+$this->headScript()->prependFile('/js/ajaxupload.js');
+
+$width = $this->width;
+$height = $this->height;
+$ratio = $width / $height;
+?>
+
+<style>
+    .logo{
+        margin-bottom: 5px;
+    }
+    #edit_image{
+        position: relative;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+    .crop_preview{
+        position:absolute;
+        left:520px;
+        top:0;
+        width:<?php echo $this->width;?>px;
+        height:<?php echo $this->height;?>px;
+        overflow:hidden;
+    }
+</style>
+<script type="text/javascript">
+    function initJcro(){
+
+        $("#xuwanting").Jcrop({
+            aspectRatio:<?php echo $ratio;?>,
+            onChange:showCoords,
+            onSelect:showCoords,
+            setSelect:[0,0,<?php echo $width;?>,<?php echo $height;?>]
+        });
+
+    }
+
+    function showCoords(obj){
+        $("#x").val(obj.x);
+        $("#y").val(obj.y);
+        $("#w").val(obj.w);
+        $("#h").val(obj.h);
+        if(parseInt(obj.w) > 0){
+            //计算预览区域图片缩放的比例，通过计算显示区域的宽度(与高度)与剪裁的宽度(与高度)之比得到
+            var rx = $("#preview_box").width() / obj.w;
+            var ry = $("#preview_box").height() / obj.h;
+//								r = rx > ry ? rx : ry;
+
+            //通过比例值控制图片的样式与显示
+            $("#crop_preview").css({
+                width:Math.round(rx * $("#xuwanting").width()) + "px",	//预览图片宽度为计算比例值与原图片宽度的乘积
+                height:Math.round(rx * $("#xuwanting").height()) + "px",//预览图片高度为计算比例值与原图片高度的乘积
+                marginLeft:"-" + Math.round(rx * obj.x) + "px",
+                marginTop:"-" + Math.round(ry * obj.y) + "px"
+            });
+        }
+    }
+    $(document).ready(function(){
+
+        var type = $("#type").val();
+        var outKeyId = $("#outKeyId").val();
+        var i = 0;
+        var files = new Array();
+        var timestamp = Date.parse(new Date());
+        //init upload file
+//        new AjaxUpload('#upload',{
+//
+//            action:"/file/upload?outKeyId="+outKeyId + "&imageType=" + type + "&insertDB=false",
+//            name:"upload",
+//            autoSubmit:true,
+//            responseType: "json",
+//            onSubmit:function(file,ext)
+//            {
+//                if( ext[0] != "jpg" && ext[0] != "gif" && ext[0] != "bmp" && ext[0] != "png")
+//                {
+//                    alert("Sorry, your file extension is "+ ext[0]+". It's only support jpg, gif and bmp.");
+//                    return false;
+//                }
+//                if($('#xuwanting').attr("src") != "")
+//                {
+//                    $("#edit_image").html("<img id=\"xuwanting\" src=\"\" style=\"display:none;\"/><span id=\"preview_box\" class=\"crop_preview\" style=\"display:none;\"><img id=\"crop_preview\" src=\"\" /></span>");
+//                }
+//                $('#loading_img').html("<img style=\"margin:0 0 0 10px;\" src=\"/img/icons/SHDB_loading.gif\" />");
+//
+//                $("#extension").val(ext[0]);
+//            },
+//            onComplete:function(file,response)
+//            {
+//
+//                var fileInfo = response[0];
+//                if ( $.inArray(file,files)<0 )//if the file not in flies
+//                {
+//                    $("#crop_submit").show();
+//                    $("#back_crop_submit").show();
+//                    $('#loading_img').html("");
+//                    var fileName = fileInfo.url;
+//                    $("#fileType").val(fileInfo.type);
+//                    $("#size").val(fileInfo.size);
+//                    $("#fileName").val(fileName);
+//                    $('#xuwanting').attr("src",fileName);
+//
+//                    $('#xuwanting').show()
+//                    $("#preview_box > img").attr("src",fileName);
+//                    $("#preview_box").show();
+//                    initJcro();
+//                    i ++;
+//
+//                }
+//                else
+//                    $('#res').html("<span id=\"fail\">&nbsp;Duplicate file name!</span>");
+//            }
+//        });
+        $('#upload').css('cursor', 'pointer');
+        $('.deleted').css('cursor', 'pointer');
+        $('#crop_submit').css('cursor', 'pointer');
+        $('#back_crop_submit').css('cursor', 'pointer');
+
+        $('.deleted').click(function(){
+            var result = confirm("Are you sure you want to delete this photo?");
+            if( result)
+            {
+                var outKeyId = $('#outKeyId').val();
+                var type = $("#type").val();
+                var route = "/photo/deleted?outKeyId=" + outKeyId + "&type="+type;
+
+                $.ajax({
+                    url:route,
+                    dataType:'html',
+                    timeout: 60000,
+                    async: false,
+                    error:function(){
+                        alert('errors');
+                    },
+                    success:function(result){
+                        $(".createdInfo").hide();
+                        $("p").hide();
+                        $(".msg_delete").show();
+                    }
+                });
+
+                $(".logo").hide();
+            }
+
+        });
+
+        $("#crop_submit").click(function(){
+            $("#crop_form").submit();
+        });
+
+        $("#back_crop_submit").click(function(){
+
+            $("#crop_form").submit();
+        });
+    });//ready
+
+</script>
+<input id="outKeyId" type="hidden" value="<?php echo $this->outKeyId;?>"/>
+<input id="type" type="hidden" value="<?php echo $this->type;?>"/>
+<input id="width" type="hidden" value="<?php echo $this->width;?>"/>
+<input id="height" type="hidden" value="<?php echo $this->height;?>"/>
+<input id="extension" type="hidden" />
+<?php
+if($this->failedValidation!='')
+{
+    if ($this->failedValidation == 'false')
+        echo "<p class='error'>Error</p>";
+    else
+        echo  "<p class='success'>Photo has been uploaded successfully.</p>";
+}
+if( $this->errorMessage !="")
+{
+    echo "<p class='error'>" .$this->errorMessage . "</p>";
+}
+
+?>
+<p style="display:none;" class="success msg_delete">Deleted Successfully.</p>
+<!-- show photo -->
+<?php
+$defaultPhoto = false;
+if( !empty ($this->photoInformation) )
+{
+?>
+    <div class="photo-list">
+        <?php
+            $defaultPhoto = $this->photoInformation[0];
+            foreach($this->photoInformation as $photo)
+            {
+        ?>
+                <div class="photo">
+                    <img src="<?php echo $photo['FilePath'];?>" width="60px" height="60px" image-id="<?php echo $photo['Id']?>" image-object="<?php echo $photo['Object']?>" image-outKeyId="<?php echo $photo['OutKeyId'];?>"/>
+                    <?php
+                        if($photo['Default']==1)
+                        {
+                    ?>
+                            <div class="default-photo"></div>
+                        <?php
+                        }
+                    ?>
+                </div>
+        <?php
+            }
+        ?>
+
+
+    </div>
+
+    <?php
+
+
+}
+
+?>
+
+<?php echo $this->render('/application/common/uploadfile.phtml')?>
+<table id="res">
+    <tr>
+        <td>
+            <input id="upload"  type="image"  src="/img/select_files.gif"/>
+
+        </td>
+        <td>
+            <div id="loading_img" style="line-height:30px; vertical-align: middle;"></div>
+        </td>
+    </tr>
+</table>
+<input type="button" id="back_crop_submit" style="border-left-width: 0; width:120px; height: 31px;  margin:15px 0px 10px 0px; display: none; background: url('/img/SHDB_Submit_Button.gif') repeat scroll 0 0 transparent;"/>
+<div id="edit_image">
+    <img id="xuwanting" src="" style="display:none;"/>
+    <span id="preview_box" class="crop_preview" style="display:none;">
+        <img id="crop_preview" src="" />
+    </span>
+</div>
+
+<form action="/photo/index" method="post" id="crop_form">
+    <input type="hidden" id="x" name="x" value="0" />
+    <input type="hidden" id="y" name="y" value="0"/>
+    <input type="hidden" id="w" name="w" value="<?php echo $this->width;?>"/>
+    <input type="hidden" id="h" name="h" value="<?php echo $this->height;?>"/>
+    <input type="hidden"  name="width" value="<?php echo $this->width;?>"/>
+    <input type="hidden"  name="height" value="<?php echo $this->height;?>"/>
+    <input type="hidden"  id="fileName" name="fileName" />
+    <input type="hidden"  id="size" name="size" />
+    <input type="hidden"  id="fileType" name="fileType" />
+    <input type="hidden"  name="outKeyId" id="outKeyId" value="<?php echo $this->outKeyId;?>"/>
+    <input type="hidden"  name="type"  id="type" value="<?php echo $this->type;?>"/>
+    <input type="button" value="" style="border-left-width: 0; width:120px; height: 31px; display:none;background: url('/img/SHDB_Submit_Button.gif') repeat scroll 0 0 transparent;" id="crop_submit" />
+</form>
+<script>
+    <?php
+        if (isset($this->failedValidation) && $this->failedValidation != 'false')
+        {
+    ?>
+        var obj_addingImg = $('.adding-Img', window.parent.document);
+        $(obj_addingImg).attr('src', '<?php echo $defaultPhoto['FilePath']?>');
+    <?
+        }
+
+    ?>
+    $(document).ready(function(){
+        $("#upload").click(function(){
+            $("#fileupload").trigger("click");
+        });
+
+        $(".photo>img").click(function(){
+            var current_img = $(this);
+            $.post('/photo/makedefault', {id:$(this).attr("image-id"), outKeyId:$(this).attr("image-outKeyId"), object:$(this).attr("image-object")}, function(result){
+                $(".photo").find(".default-photo").remove();
+                $(current_img).after("<div class='default-photo'></div>");
+                var obj_addingImg = $('.adding-Img', window.parent.document);
+                $(obj_addingImg).attr('src', $(current_img).attr("src"));
+            });
+        });
+    });
+</script>

@@ -1,0 +1,473 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Bob
+ * Date: 14-6-26
+ * Time: 上午10:27
+ */
+use \Dhr\String;
+use \Application\Model\DbTable;
+
+$this->headLink()->prependStylesheet($this->basePath() . '/css/backend.css');
+$dhr_string = new String();
+$connectvity = $dhr_string->getProductConnectivity();
+$osCompatibility = $dhr_string->getOSCompatibility();
+$availability = $dhr_string->getProductAvailability();
+$powerSupply = $dhr_string->getProductPowerSupply();
+$regionalAvailability = $dhr_string->getProductRegionalAvailability();
+$category = $dhr_string->getProductCategory();
+$status = $dhr_string->getProductStatus();
+$ecoSystem = $dhr_string->getEcosystem();
+$db_photo = new DbTable\Image();
+$productImageType = $db_photo->getImageFileTypeId("ProductImage");
+$productPhotoType = $db_photo->getImageFileTypeId("ProductPhotos");
+$productSoftwarePhotoType  = $db_photo->getImageFileTypeId("ProductSoftwareScreenShots");
+$productImages = $db_photo->getImages(null, $data['ProductInnerId']);
+
+$db_products = new DbTable\Product();
+foreach($productImages as $value)
+{
+    $images[$value['Type']][]=$value;
+}
+
+?>
+<div class="pure-g">
+    <div class="pure-u-17-24">
+        <div class="title_box" style="margin-bottom: 20px;">
+            <div class="title_box_header" style="">
+                <?php echo $data['ProductName']?>
+            </div>
+            <div class="baseBox title_box_functions">
+                <div style="float: right; width: auto" class=" pure-menu-open pure-menu-horizontal">
+                    <ul>
+                        <li class="pure-menu-selected">
+                            <a>
+                                <span class="main-icons main-icons-small-plug"></span>
+                                <div style="vertical-align: top; display: inline-block;">ADD TO WISH LIST</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <span class="main-icons main-icons-small-plug"></span>
+                                <div style="vertical-align: top; display: inline-block; ">COMPARE PRODUCTS</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <span class="main-icons main-icons-small-plug"></span>
+                                <div style="vertical-align: top; display: inline-block; ">ADD INSIGHTS</div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--      PRODUCT OVERVIEW-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>PRODUCT OVERVIEW</h3>
+                </li>
+                <li >
+                    <div class="pure-g">
+                        <div class="pure-u-5-24">
+                            <img src="<?php echo $images[$productImageType][0]['FilePath']?>"/>
+                        </div>
+                        <div class="pure-u-19-24" style="position: relative ">
+                            <div style="position: absolute; bottom: 0; width: 100%">
+                                <div class="pure-g">
+
+                                    <div class="pure-u-5-24">
+                                        <?php echo "Launched:"?>
+                                    </div>
+                                    <div class="pure-u-19-24">
+                                        <?php  echo $data['Launched']?>
+                                    </div>
+
+                                    <div class="pure-u-5-24">
+                                        <?php echo "Status:"?>
+                                    </div>
+                                    <div class="pure-u-19-24">
+                                        <?php  echo $status[$data['Status']];?>
+                                    </div>
+
+                                    <div class="pure-u-5-24">
+                                        <?php echo "Ecosystem:"?>
+                                    </div>
+                                    <div class="pure-u-19-24">
+                                        <?php  echo $ecoSystem[$data['Ecosystem']];?>
+                                    </div>
+
+                                    <div class="pure-u-5-24">
+                                        <?php echo "Website:"?>
+                                    </div>
+                                    <div class="pure-u-19-24">
+                                        <a style="padding: 0" href="<?php  echo $data['Website'];?>" target="_blank"><?php  echo $data['Website'];?></a>
+                                    </div>
+
+                                    <div class="pure-u-5-24">
+                                        <?php echo "Short Description:"?>
+                                    </div>
+                                    <div class="pure-u-19-24">
+                                        <?php  echo $dhr_string->entertobr($data['ShortDescription']);?>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      COLOR-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>PRODUCTION GENERATION</h3>
+                </li>
+                <li >
+                    <div class="pure-g">
+                        <div class="pure-u-5-24">
+                            <?php echo "Current Generation:"?>
+                        </div>
+                        <div class="pure-u-19-24">
+                            <?php  echo $data['ProductGeneration']?>
+                        </div>
+
+                        <div class="pure-u-5-24">
+                            <?php echo "Generation Log:"?>
+                        </div>
+                        <div class="pure-u-19-24">
+                            <?php  echo $dhr_string->entertobr($data['GenerationLog'])?>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      DESCRIPTION -->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>DESCRIPTION</h3>
+                </li>
+                <li >
+                    <div>
+                        <?php echo String::entertobr($data['Description']); ?>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      DIMENSIONS-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>DIMENSIONS</h3>
+                </li>
+                <li >
+                    <div class="pure-g">
+                        <div class="pure-u-5-24">
+                            Height
+                        </div>
+                        <div class="pure-u-19-24">
+                            <?php echo $data['DimensionsHeight']?>
+                        </div>
+                        <div class="pure-u-5-24">
+                            Width
+                        </div>
+                        <div class="pure-u-19-24">
+                            <?php echo $data['DimensionsWidth']?>
+                        </div>
+                        <div class="pure-u-5-24">
+                            Depth
+                        </div>
+                        <div class="pure-u-19-24">
+                            <?php echo $data['DimensionsDepth']?>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      CONNECTIVITY-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>CONNECTIVITY</h3>
+                </li>
+                <li >
+                    <div>
+                        <?php
+                            if(!empty($data['Connectivity']))
+                            {
+                                echo "<ol class='checkbox-list '>";
+                                $data['Connectivity']   = explode("&&&", $data['Connectivity']);
+                                foreach($data['Connectivity'] as $value)
+                                    echo "<li>".$connectvity[$value] . "</li>";
+                                echo "</ol>";
+                            }
+                        ?>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      CONTROL SOFTWARE OPERATION SYSTEM COMPATIBILITY-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>CONTROL SOFTWARE OPERATION SYSTEM COMPATIBILITY</h3>
+                </li>
+                <li >
+                    <div>
+                        <?php
+                        if(!empty($data['OSCompatibility']))
+                        {
+                            echo "<ol class='checkbox-list '>";
+                            $data['OSCompatibility']   = explode("&&&", $data['OSCompatibility']);
+                            foreach($data['OSCompatibility'] as $value)
+                                echo "<li>".$osCompatibility[$value] . "</li>";
+                            echo "</ol>";
+                        }
+                        ?>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      POWER SUPPLY-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>POWER SUPPLY</h3>
+                </li>
+                <li >
+                    <div>
+                        <?php
+                        if(!empty($data['PowerSupply']))
+                        {
+                            echo "<ol class='checkbox-list '>";
+                            $data['PowerSupply']   = explode("&&&", $data['PowerSupply']);
+                            foreach($data['PowerSupply'] as $value)
+                                echo "<li>".$powerSupply[$value] . "</li>";
+                            echo "</ol>";
+                        }
+                        ?>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      COLOR-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>COLOR</h3>
+                </li>
+                <li >
+                    <div>
+                    <?php echo $data['Color'];?>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      Product Feature-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>KICK-OUT CRITERIA</h3>
+                </li>
+                <li >
+                    <div>
+                        <?php
+
+                        echo "<ol class='checkbox-list '>";
+                        if($data['AmateursPurchasable']==1)echo "<li>Purchasable by AMATEURS</li>";
+                        if($data['AmateursInstall']==1)echo "<li>Easy Hardware Installation for AMATEURS</li>";
+
+                        echo "</ol>";
+
+                        ?>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      Product Feature-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>PRODUCT FEATURE</h3>
+                </li>
+                <li >
+                    <div>
+                        <?php
+
+                            echo "<ol class='checkbox-list '>";
+                            if($data['EnergyEfficient']==1)echo "<li>Energy Efficient</li>";
+                            if($data['RemoteAccess']==1)echo "<li>Remote Access</li>";
+                            if($data['Programmable']==1)echo "<li>Programmable</li>";
+                            if($data['RandomizedProgram']==1)echo "<li>Randomized Program</li>";
+                            if($data['VoiceControl']==1)echo "<li>Voice Control</li>";
+                            if($data['ImproveHealth']==1)echo "<li>Improves Health</li>";
+                            if($data['ImproveSafety']==1)echo "<li>Improves Safety</li>";
+                            echo "</ol>";
+
+                        ?>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      Product API-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>PRODUCT API</h3>
+                </li>
+                <li >
+                        <div class="pure-g">
+                            <div class="pure-u-5-24">
+                                <?php echo "API Name:"?>
+                            </div>
+                            <div class="pure-u-19-24">
+                                <?php echo $data['APIName']?>
+                            </div>
+
+                            <div class="pure-u-5-24">
+                                <?php echo "API Website:"?>
+                            </div>
+                            <div class="pure-u-19-24">
+                                <a style="padding: 0" target="_blank" href="<?php echo $data['APIWebsite']?>"><?php echo $data['APIWebsite']?></a>
+                            </div>
+                        </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      Product Photos-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>PRODUCT PHOTOS</h3>
+                </li>
+                <li >
+                    <div>
+                        <?php
+                        if(isset($images[$productPhotoType]))
+                            foreach( $images[$productPhotoType] as $value)
+                                echo '<img src="'. $value['FilePath'].'"/>';
+                        ?>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      Product Videos-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>PRODUCT VIDEOS</h3>
+                </li>
+                <li >
+                    <div>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      Product Installation Guides-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>PRODUCT INSTALLATION GUIDES</h3>
+                </li>
+                <li>
+                    <div>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--      Product Compatibility-->
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>PRODUCT COMPATIBILITY</h3>
+                </li>
+                <li>
+                    <div>
+                    <?php
+                        if(!empty($data['productCompatibility']))
+                        {
+                            echo "<ol class='checkbox-list '>";
+                            $result = $db_products->getRecordsByProductInnerIds($data['productCompatibility']);
+                            foreach($result as $value)
+                            {
+                                echo "<li>".$value['ProductName']."</li>";
+                            }
+                            echo "</ol>";
+                        }
+                    ?>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="pure-u-1-24">
+
+    </div>
+    <div class="pure-u-6-24">
+        <div class="share baseBox" >
+            <div style="float: left; height: 40px; line-height: 40px; margin-left: 15px; color: #999">
+                Share:
+            </div>
+            <div style="float: left; height: 40px; width:185px; padding-left: 5px; background: #fcfcfc" class="pure-menu pure-menu-open pure-menu-horizontal">
+                <ul style="margin-top: 10px">
+                    <li>
+                        <span class="social-media-icons fb-social-media-icons"></span>
+                    </li>
+                    <li>
+                        <span class="social-media-icons linkedin-social-media-icons"></span>
+                    </li>
+                    <li>
+                        <span class="social-media-icons twitter-social-media-icons"></span>
+                    </li>
+                    <li>
+                        <span class="social-media-icons googleplus-social-media-icons"></span>
+                    </li>
+                    <li>
+                        <span class="social-media-icons email-social-media-icons"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="boxGroup baseBox pure-menu pure-menu-open">
+            <ul class="">
+                <li>
+                    <h3>PRICE</h3>
+                </li>
+                <li >
+                    <div style="color: #39a4ff; font-size: 20px; font-weight: bold">
+                        USD 249
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="edit-save-box">
+        <a href="/product/index?id=<?php echo $data['ProductInnerId']?>">
+            <button class="btn btn-blue big">Edit</button>
+        </a>
+    </div>
+</div>

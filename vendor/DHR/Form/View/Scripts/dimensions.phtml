@@ -1,0 +1,94 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Bob
+ * Date: 14-6-24
+ * Time: 上午9:24
+ */
+$attributes = $element->getAttributes();
+$message = $element->getMessages();
+$options = $element->getOptions();
+$values = $element->getValue();
+
+?>
+
+<div class="dimensions-item">
+   <span style="width: 45px">Height:</span>
+    <input class="dimensions height" type="text" placeholder="Height" name="<?php echo $attributes['name']?>[height]" unit="in" value="<?php echo $values['height']?>"/> <span style="width: 60px">inches (") </span>
+    <input class="dimensions" type="text" placeholder="Height" name="<?php echo $attributes['name']?>[height_cm]" unit="cm" value="<?php echo $values['height']?>"/> <span style="width: 90px">centimeters (cm)</span>
+    <input class="dimensions" type="text" placeholder="Height" name="<?php echo $attributes['name']?>[height_mm]" unit="mm" value="<?php echo $values['height']?>"/> <span >millimeters (mm)</span>
+</div>
+<div class="dimensions-item">
+    <span style="width: 45px">Width:</span>
+    <input class="dimensions width" type="text" placeholder="Width" name="<?php echo $attributes['name']?>[width]"  unit="in" value="<?php echo $values['width']?>"/> <span style="width: 60px">inches (")</span>
+    <input class="dimensions" type="text" placeholder="Width" name="<?php echo $attributes['name']?>[width_cm]"  unit="cm" value="<?php echo $values['width']?>"/> <span style="width: 90px">centimeters (cm)</span>
+    <input class="dimensions" type="text" placeholder="Width" name="<?php echo $attributes['name']?>[width_mm]"  unit="mm" value="<?php echo $values['width']?>"/> <span >millimeters (mm)</span>
+</div>
+<div class="dimensions-item">
+    <span style="width: 45px">Depth:</span>
+    <input class="dimensions depth" type="text" placeholder="Depth" name="<?php echo $attributes['name']?>[depth]"  unit="in" value="<?php echo $values['depth']?>"/> <span style="width: 60px">inches (")</span>
+    <input class="dimensions" type="text" placeholder="Depth" name="<?php echo $attributes['name']?>[depth_cm]"  unit="cm" value="<?php echo $values['depth']?>"/> <span style="width: 90px">centimeters (cm)</span>
+    <input class="dimensions" type="text" placeholder="Depth" name="<?php echo $attributes['name']?>[depth_mm]"  unit="mm" value="<?php echo $values['depth']?>"/> <span >millimeters (mm)</span>
+</div>
+<script>
+    var cm_to_in=0.3937008;
+    var cm_to_mm = 10;
+    function exchangeUnit(obj_changeUnit)
+    {
+        var cm = 0.00;
+        var inches = 0.00;
+        var mm = 0.00
+        if($(obj_changeUnit).val()=="")
+        {
+            $(obj_changeUnit).siblings(":input[unit='in']").val("");
+            $(obj_changeUnit).siblings(":input[unit='cm']").val("");
+            $(obj_changeUnit).siblings(":input[unit='mm']").val("");
+            return ;
+        }
+        if($(obj_changeUnit).attr("unit")=="in")
+        {
+            inches = parseFloat($(obj_changeUnit).val());
+
+            cm = parseFloat((inches/cm_to_in).toFixed(1));
+            if(parseInt(cm) == parseInt((cm+0.9)))
+                cm = parseInt(cm);
+            mm = (cm* cm_to_mm).toFixed(0);
+                $(obj_changeUnit).siblings(":input[unit='cm']").val(cm);
+            $(obj_changeUnit).siblings(":input[unit='mm']").val(mm);
+
+        }
+        else if($(obj_changeUnit).attr("unit")=="mm")
+        {
+            mm = parseFloat($(obj_changeUnit).val());
+
+            cm = parseFloat((mm/cm_to_mm).toFixed(1));
+            if(parseInt(cm) == parseInt((cm+0.9)))
+                cm = parseInt(cm);
+
+            inches = parseFloat((cm* cm_to_in).toFixed(2));
+            if(parseInt(inches) == parseInt((inches+0.99)))
+                inches = parseInt(inches);
+
+            $(obj_changeUnit).siblings(":input[unit='cm']").val(cm);
+            $(obj_changeUnit).siblings(":input[unit='in']").val(inches);
+
+        }
+        else
+        {
+            cm = parseFloat($(obj_changeUnit).val());
+            mm =  (cm*cm_to_mm).toFixed(0);
+            inches = (cm*cm_to_in).toFixed(2);
+            if(parseInt(inches) == parseInt((inches+0.99)))
+                inches = parseInt(inches);
+            $(obj_changeUnit).siblings(":input[unit='in']").val(inches);
+            $(obj_changeUnit).siblings(":input[unit='mm']").val(mm);
+
+        }
+    }
+
+    $(document).ready(function(){
+        $(":input[unit='in']").each(function(){exchangeUnit(this)});
+
+        $(document).on("keyup", ".dimensions", function(){exchangeUnit(this)});
+    });
+</script>

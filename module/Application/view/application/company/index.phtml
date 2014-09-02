@@ -1,0 +1,91 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Bob
+ * Date: 14-6-26
+ * Time: 上午10:27
+ */
+$this->headLink()->prependStylesheet($this->basePath() . '/css/backend.css');
+?>
+<?php
+if($this->insert == true)
+{
+?>
+   <h1>Add data successfully</h1>
+<?php
+}
+?>
+
+<div class="pure-g">
+   <div class="pure-u-17-24">
+      <div class="title_box" style="margin-bottom: 20px;">
+         <div class="title_box_header" style="">
+               Nest Labs
+         </div>
+         <div class="baseBox title_box_functions">
+               <div style="float: right; width: auto" class=" pure-menu-open pure-menu-horizontal">
+                        <ul>
+                           <li class="pure-menu-selected">
+                              <a>
+                                 <span class="main-icons main-icons-small-plug"></span>
+                                 <div style="vertical-align: top; display: inline-block;">COMPARE COMPANIES</div>
+                              </a>
+                           </li>
+                           <li>
+                              <a>
+                                 <span class="main-icons main-icons-small-plug"></span>
+                                 <div style="vertical-align: top; display: inline-block; ">ADD INSIGHTS</div>
+                              </a>
+                           </li>
+                        </ul>
+               </div>
+         </div>
+      </div>
+      <?php
+      echo $this->form()->render($form);
+      ?>
+   </div>
+   <div class="pure-u-1-24">
+
+   </div>
+   <div class="pure-u-6-24">
+      <div class="share baseBox" >
+         <div style="float: left; height: 40px; line-height: 40px; margin-left: 15px; color: #999">
+            Share:
+         </div>
+         <div style="float: left; height: 40px; width:185px; padding-left: 5px; background: #fcfcfc" class="pure-menu pure-menu-open pure-menu-horizontal">
+            <ul style="margin-top: 10px">
+               <li>
+                  <span class="social-media-icons fb-social-media-icons"></span>
+               </li>
+               <li>
+                  <span class="social-media-icons linkedin-social-media-icons"></span>
+               </li>
+               <li>
+                  <span class="social-media-icons twitter-social-media-icons"></span>
+               </li>
+               <li>
+                  <span class="social-media-icons googleplus-social-media-icons"></span>
+               </li>
+               <li>
+                  <span class="social-media-icons email-social-media-icons"></span>
+               </li>
+            </ul>
+         </div>
+   </div>
+      <div class="clearfix"></div>
+      <div class="boxGroup baseBox pure-menu pure-menu-open">
+         <ul class="">
+            <li>
+             <h3>PRICE</h3>
+            </li>
+            <li >
+               <div style="color: #39a4ff; font-size: 20px; font-weight: bold">
+                  USD 249
+               </div>
+
+            </li>
+         </ul>
+      </div>
+   </div>
+</div>

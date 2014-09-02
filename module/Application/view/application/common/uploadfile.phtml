@@ -1,0 +1,202 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Bob
+ * Date: 14-8-6
+ * Time: 下午1:33
+ */
+?>
+<?php
+/**
+ * Created by JetBrains PhpStorm.
+ * User: b.luo
+ * Date: 13-7-2
+ * Time: 上午11:22
+ * To change this template use File | Settings | File Templates.
+ */
+
+$this->headScript()->prependFile('/js/upload/jquery.fileupload-fp.js');
+$this->headScript()->prependFile('/js/upload/jquery.fileupload-ui.js');
+$this->headScript()->prependFile('/js/upload/jquery.iframe-transport.js');
+$this->headScript()->prependFile('/js/upload/jquery.fileupload.js');
+$this->headScript()->prependFile('/js/upload/vendor/jquery.ui.widget.js');
+
+
+
+?>
+
+<style>
+    #dropzone {
+        text-align: center;
+        display: none;
+        /*position: absolute;*/
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+    }
+    #dropzone.in {
+        width: 100%;
+        height: 150px;
+        line-height: 150px;
+        font-size: 35px;
+        display: block;
+        left: 5px;
+        top: 140px;
+        /*position: absolute;*/
+        /*margin: -150px 0 0 -450px;*/
+        background: white;
+        border: 3px dotted #000000;
+        z-index: 100000;
+        opacity: 0.2;
+        box-sizing: border-box;
+
+    }
+    #dropzone.hover {
+        /*background: #d3d3d3;*/
+        background: rgb(8, 142, 248);
+        color: white;
+    }
+    #dropzone.fade {
+        -webkit-transition: all 0.3s ease-out;
+        -moz-transition: all 0.3s ease-out;
+        -ms-transition: all 0.3s ease-out;
+        -o-transition: all 0.3s ease-out;
+        transition: all 0.3s ease-out;
+        /*opacity: 0.2;*/
+    }
+    .uploadLoad{
+        display: none;
+        background:url(/public/images/filter_loading.gif) no-repeat center center ;
+        height: 300px;
+    }
+    .uploadSuccess{
+        display: none;
+    }
+    .uploadSuccess p{
+        margin: 0;
+        color: white;
+    }
+</style>
+
+<script type="text/javascript">
+    var isDropDrag = false;
+    var objectID = $("#outKeyId").val();
+    var imageType=$("#type").val();
+    var currentUploadZone = null;
+    $(document).ready(function(){
+        // Initialize the jQuery File Upload widget:
+        $('#fileupload').fileupload({
+            dataType: 'json',
+            dropZone: $('#dropzone'),
+            formData:{'outKeyId':objectID,'imageType':imageType, 'insertDB': false, 'scale': 1},
+            add: function (e, data) {
+                if(isDropDrag)
+                {
+                    $("#dropzone").addClass("hover in");
+                    $("#dropzone > div").hide();
+                    $("#dropzone > .uploadLoad").show();
+                }
+                if($('#xuwanting').attr("src") != "")
+                {
+                    $("#edit_image").html("<img id=\"xuwanting\" src=\"\" style=\"display:none;\"/><span id=\"preview_box\" class=\"crop_preview\" style=\"display:none;\"><img id=\"crop_preview\" src=\"\" /></span>");
+                }
+                data.submit();
+
+            },
+            done: function (e, data) {
+                errorMsg = false;
+                $.each(data.result, function (index, file) {
+                    if(file.error)
+                    {
+                        errorMsg = true;
+                        alert("Upload Error: "+ file.name+" is not "+file.error);
+                        if(isDropDrag)
+                        {
+                            $("#dropzone > div").hide();
+                            $("#dropzone > .dropTest").show();
+                        }
+                    }
+                    else
+                    {
+                        $(currentUploadZone).find(".adding-Img").attr("src", file.url);
+                    }
+
+                    if(!errorMsg)
+                    {
+
+                        $("#crop_submit").show();
+                        $("#back_crop_submit").show();
+                        $('#loading_img').html("");
+                        var fileName = file.url;
+                        $("#fileType").val(file.type);
+                        $("#size").val(file.size);
+                        $("#fileName").val(file.name);
+                        $('#xuwanting').attr("src",fileName);
+
+                        $('#xuwanting').show()
+                        $("#preview_box > img").attr("src",fileName);
+                        $("#preview_box").show();
+                        initJcro();
+
+                        if(isDropDrag)
+                        {
+                            $("#dropzone").addClass("hover in");
+                            $("#dropzone > div").hide();
+                            $("#dropzone > .uploadSuccess").show();
+                            setTimeout(function () {
+                                $("#dropzone").removeClass('in hover');
+                                $("#dropzone > .uploadSuccess").hide();
+                                $("#dropzone > .dropTest").show();
+                            }, 3000);
+                        }
+                    }
+
+                    isDropDrag = false;
+                });
+
+
+            }
+        });
+
+    });
+
+    $(document).bind('dragover', function (e) {
+        var dropZone = $('#dropzone'),
+            timeout = window.dropZoneTimeout;
+        if (!timeout) {
+            dropZone.addClass('in');
+        } else {
+            clearTimeout(timeout);
+        }
+        var found = false,
+            node = e.target;
+        do {
+            if (node === dropZone[0]) {
+                found = true;
+                break;
+            }
+            node = node.parentNode;
+        } while (node != null);
+        if (found) {
+            dropZone.addClass('hover');
+        } else {
+            dropZone.removeClass('hover');
+        }
+        window.dropZoneTimeout = setTimeout(function () {
+            window.dropZoneTimeout = null;
+            dropZone.removeClass('in hover');
+        }, 100);
+    });
+
+    $(document).bind('drop dragover', function (e) {
+        e.preventDefault();
+    });
+</script>
+<div id="dropzone" class="fade well">
+    <div class="dropTest">Drop files here</div>
+    <div class="uploadLoad">   </div>
+    <div class="uploadSuccess"><p >Upload Successfully</p></div>
+</div>
+<input  type="file" name="upload[]" multiple data-url="/file/upload" id="fileupload" style="display: none">

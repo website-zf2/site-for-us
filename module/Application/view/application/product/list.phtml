@@ -1,0 +1,131 @@
+<?php
+use \Application\Model\DbTable;
+use \DHR;
+/**
+ * Created by PhpStorm.
+ * User: Bob
+ * Date: 14-8-1
+ * Time: 下午1:38
+ */
+$this->headLink()->prependStylesheet($this->basePath() . '/css/backend.css');
+$this->headLink()->appendStylesheet($this->basePath().'/css/tablesorter.css');
+
+$this->headScript()->appendFile($this->basePath()  . '/js/jquery.tablesorter.min.js');
+
+$dhr_string = new DHR\String();
+$status = $dhr_string->getProductStatus();
+$ecoSystem = $dhr_string->getEcosystem();
+$category = $dhr_string->getProductCategory();
+$connectivity = $dhr_string->getProductConnectivity();
+$powerSupply = $dhr_string->getProductPowerSupply();
+
+$products = $this->products;
+$db_images = new DbTable\Image();
+$productImageType = $db_images->getImageFileTypeId("ProductImage");
+
+?>
+<div class="row container">
+    <a href="/product/index" >
+        <button class="btn-blue btn">Add Product</button>
+    </a>
+
+    <table class="tablesorter" >
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Owner</th>
+            <th>Monthly Service Fee</th>
+            <th>Dependence on Other Hardware</th>
+            <th>Connectivity</th>
+            <th>Power</th>
+            <th>External Ecosystem Compatibility</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        if($products)
+        {
+            foreach($products as $product)
+            {
+                ?>
+                <tr>
+                    <td>
+                        <?php
+                        $productImage = $db_images->getImages($productImageType, $product['ProductInnerId']);
+                        if($productImage)
+                            echo "<img style='width:140px' src='".$productImage[0]['FilePath']."'/>";
+                        ?>
+                        <a target="_blank" href="/product/index?read=true&id=<?php echo $product['ProductInnerId'];?>"><?php echo $product['ProductId'];?></a>
+                    </td>
+                    <td>
+                        <?php echo $product['ProductName'];?>
+                    </td>
+                    <td>
+                        <?php
+                        if(!empty($product['ProductCategory']))
+                        {
+                            $productCategory = $dhr_string->indexToArraylist($product['ProductCategory'], $category);
+                            foreach($productCategory as $value)
+                                echo $value."<br/>";
+                        }
+                        ?>
+                    </td>
+
+                    <td>
+                        <?php if( $product['Status'] ) echo $status[$product['Status']];?>
+                    </td>
+                    <!--                    Owner-->
+                    <td>
+
+                    </td>
+                    <!--                    Monthly Service Fee-->
+                    <td>
+
+                    </td>
+
+                    <td>
+                        <!--                        Dependence on Other Hardware-->
+                    </td>
+                    <!--                    Connectivity -->
+                    <td>
+                        <?php
+                        if(!empty($product['Connectivity']))
+                        {
+                            $productConnectivity = $dhr_string->indexToArraylist($product['Connectivity'], $connectivity);
+                            foreach($productConnectivity as $value)
+                                echo $value."<br/>";
+                        }
+                        ?>
+                    </td>
+                    <!--                   power Supply -->
+                    <td>
+                        <?php
+                        if(!empty($product['PowerSupply']))
+                        {
+                            $productPowerSupply = $dhr_string->indexToArraylist($product['PowerSupply'], $powerSupply);
+                            foreach($productPowerSupply as $value)
+                                echo $value."<br/>";
+                        }
+                        ?>
+                    </td>
+                    <!--                   External Ecosystem Compatibility -->
+                    <td>
+
+                    </td>
+                    <td>
+                        <a  target="_blank" href="/product/index?id=<?php echo $product['ProductInnerId'];?>" class="editLinkIcon">&nbsp;&nbsp;</a>
+                    </td>
+
+                </tr>
+            <?php
+            }
+        }
+        ?>
+        </tbody>
+    </table>
+</div>
+

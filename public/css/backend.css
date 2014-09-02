@@ -1,0 +1,304 @@
+.pure-g table{
+    width: 100%;
+}
+.pure-form label{
+    margin: 0;
+    display: inline-block;
+}
+
+.form-element{
+    /*margin-bottom: 16px;*/
+    /*padding: 4px 6px;*/
+}
+tr.form-element-show td:nth-child(even), tr.form-element td:nth-child(even){
+    border-bottom: 1px solid #e1e1e1;
+    border-top: 1px solid #e1e1e1;
+}
+
+tr.form-element-show td:nth-child(odd), tr.form-element td:nth-child(odd){
+    width: 100%;
+    text-align: right;
+    color: #7f7f7f;
+
+}
+
+#productRegionalAvailability .form-label{
+    padding: 8px 0px 8px 12px;
+    width: 20px !important;
+    vertical-align: middle;
+    text-align: left;
+    border-bottom: 1px solid #e1e1e1;
+    border-top: 1px solid #e1e1e1;
+}
+#productRegionalAvailability .form-input{
+    padding: 8px 5px;
+}
+.form-input{
+    padding: 8px 17px;
+    vertical-align: middle;
+}
+.form-label{
+    /*margin-bottom: 5px;*/
+    padding: 8px 20px 8px 0;
+    width: 115px !important;
+    vertical-align: top;
+}
+
+.boxGroup ul li:first-child h3, .pure-form legend{
+    font-size: 15px;
+    font-weight: bold;
+    background-color: #2d2d2d;
+    color: white;
+    padding: 10px 15px;
+    width: auto;
+    margin: 0;
+    border: 0;
+    display: inline-block;
+}
+.pure-form fieldset{
+    padding: 0;
+    box-shadow: 0 1px 1px 0 #cbcbcb;
+    margin-bottom: 25px;
+}
+ .fieldset-legend{
+    background-color: #fcfcfc;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 8px;
+    position: relative;
+}
+
+ .fieldset-update
+{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #39a4ff;
+    font-weight: bolder;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+ .fieldset-content{
+    padding: 15px 15px 15px 15px;
+    background-color: #ffffff;
+    /*padding-top: 10px;*/
+    /*overflow: auto;*/
+    height: auto;
+}
+
+ .fieldset-bottom{
+    height: 20px;
+    border-top: 1px solid #eaeaea;
+    background-color: #ffffff;
+     background-color: #fcfcfc;
+}
+.pure-form .dimensions[type=text], .pure-form .weight[type=text]{
+    width: 65px;
+}
+
+.pure-form input[type=text], .pure-form input[type=password], .pure-form input[type=email], .pure-form input[type=url], .pure-form input[type=date], .pure-form input[type=month], .pure-form input[type=time], .pure-form input[type=datetime], .pure-form input[type=datetime-local], .pure-form input[type=week], .pure-form input[type=number], .pure-form input[type=search], .pure-form input[type=tel], .pure-form input[type=color], .pure-form select, .pure-form textarea{
+    width: 250px;
+}
+.pure-form textarea{
+    width: 400px;
+}
+.pure-form select{
+    width: 80px;
+    height: 30px;
+}
+.pure-form textarea{
+    height: 80px;
+}
+.pure-form .single_select{
+    width: 150px;
+}
+
+.pure-form li{
+    list-style-type: none;
+}
+.pure-form ul{
+    padding: 0;
+}
+
+
+.share ul li{
+    margin-right: 10px;
+}
+.share{
+    background-color: #ffffff;
+    overflow: hidden;
+}
+.share ul li:last-child{
+    margin-right: 0px;
+}
+
+.clearfix{
+    clear: both;
+}
+.baseBox{
+    border: 1px solid #ffffff;
+    background: #fcfcfc;
+    box-shadow: 0 1px 1px 0 #cbcbcb;
+
+}
+
+.boxGroup.pure-menu.pure-menu-open{
+    margin-top: 20px;
+    padding-bottom: 15px;
+}
+.boxGroup.pure-menu.pure-menu-open{
+    border:  none;
+}
+.boxGroup>ul>li{
+    border-bottom: 1px solid #eaeaea;
+    padding: 10px 15px;
+}
+.boxGroup>ul>li:first-child{
+    padding: 0 0 8px 0;
+}
+
+.title-box-header{
+    padding-left: 15px;
+    height: 49px;
+    line-height: 49px;
+    background-color: #39a4ff;
+    font-size: 22px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.title-box-functions{
+    height: 50px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 300px;
+}
+.title-box-functions>div{
+    position: absolute;
+    line-height: 20px;
+}
+
+
+.title-box-functions ul li{
+    margin-right: 25px;
+}
+
+.title-box-functions ul{
+    margin-top: 9px;
+}
+
+.chosen-container-multi .chosen-choices li.search-field input[type=text] {
+    height: 26px;
+}
+
+.chosen-container-multi .chosen-choices{
+    border-radius: 4px;
+}
+
+.multi-checkbox-li .checkbox{
+    margin-bottom: 7px;
+}
+
+.multi-checkbox-li .checkbox input{
+    margin-right: 4px;
+}
+.dimensions-item{
+
+    margin-bottom: 5px;
+}
+
+
+.dimensions-item span{
+    width: 80px;
+    display: inline-block;
+    font-size: 11px
+}
+.weight-item span{
+    width: 75px;
+    display: inline-block;
+    font-size: 11px
+}
+.multi-checkbox-value{
+    width: 350px;
+    display: inline-block;
+}
+
+.dimensions-wight-value{
+    width: 150px;
+    display: inline-block;
+}
+
+.product-short-preview{
+    margin-top: 10px;
+    width: 200px;
+}
+.product-short-preview td{
+    /*border: 1px solid #e0e3e2;*/
+}
+.product-short-preview td:nth-child(odd){
+    /*border-right: none;*/
+}
+.product-short-preview td:nth-child(even){
+    /*border-left: none;*/
+}
+
+.product-short-preview .product-short-photo{
+    width: 58px;
+    height: 60px;
+    border: 1px solid #dddddd;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.product-short-photo img{
+    width: 58px;
+    height: 60px;
+}
+.product-preview-list-title{
+    color: #737373;
+    text-align: right;
+    padding-right: 15px;
+    height: 25px;
+    line-height: 25px;
+}
+.product-preview-list{
+    margin-bottom: 15px;
+}
+
+.productBasic td:nth-child(even)
+{
+    width: 330px;
+}
+
+.minus-icon{
+    width: 16px;
+    height: 16px;
+    background: url("/img/icons/icon_minus.gif");
+    top: 10px;
+    right: 10px;
+    position: absolute;
+}
+.form-label>label[title]{
+    border: 1px solid #e0e0e0;
+    background-color: #fcfcfc; padding: 0 3px
+}
+.form-label>label[title]:hover{
+    border: 1px solid #666666;
+    background-color:  #999999;
+    color: #ffffff;
+}
+
+.photo-list .photo{
+    display: inline-block;
+    position: relative;
+}
+
+.photo-list .default-photo{
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-image: url("/img/icons/button_check_green.png");
+    right: 2px;
+    bottom: 5px;
+}

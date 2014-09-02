@@ -1,0 +1,179 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: RayZheng
+ * Date: 7/23/14
+ * Time: 4:03 下午
+ */
+$this->headLink()
+    ->prependStylesheet($this->basePath() . '/css/front.css')
+    ->prependStylesheet('//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css');
+
+$this->headScript()
+    ->prependFile('//code.jquery.com/ui/1.11.0/jquery-ui.js');
+$this->headScript()
+    ->prependFile('//d3js.org/d3.v3.min.js');
+?>
+<script>
+    var ffmapConfig = {
+        // initial gravity, friction, of the graph at pageload:
+        gravity:   0.04,
+        friction:  0.8,
+        theta:     1,
+        charge:    2.5,
+        distance:  2,
+        strength:  1.0,
+        nodes_json:{'nodes':<?php echo json_encode($this->nodes);?>, 'links':<?php echo json_encode($this->links);?>}
+    };
+    $().ready(function () {
+        $("#budget-range").slider({
+            range: true,
+            min: 0,
+            max: 500,
+            values: [ 0, 500 ],
+            step: 100,
+            slide: function (event, ui) {
+                $("#budget").val("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
+            }
+        });
+        $("#budget").val("$" + $("#budget-range").slider("values", 0) +
+            " - $" + $("#budget-range").slider("values", 1));
+
+        $('#filter_submit').click(function () {
+            $('.filter_form').submit();
+        });
+        $('#camera,#light').click(function () {
+            if ($(this).prop('checked') && $(this).parent().next().children("input").val() == '')
+                $(this).parent().next().children("input").val(1);
+            else
+                $(this).parent().next().children("input").val('');
+        });
+
+
+
+
+    });
+
+</script>
+
+<style>
+
+    .node circle {
+        cursor: pointer;
+        stroke: #3182bd;
+        stroke-width: 1.5px;
+    }
+
+    .node text {
+        font: 10px sans-serif;
+        pointer-events: none;
+        text-anchor: middle;
+    }
+
+    line.link {
+        fill: none;
+        stroke: #9ecae1;
+        stroke-width: 1.5px;
+    }
+
+</style>
+<div class="pure-g">
+    <div class="pure-u-1-4">
+        <form class="pure-form filter_form" action="" method="post">
+            <div class="box-group">
+                <div class="base-box filter" id="filter_country">
+                    <div class="base-box-title">Country</div>
+                    <div class="base-box-content"><select class="pure-input-1 filter-input" name="filter_country"
+                                                          id="filter_country">
+                            <option value="China">China</option>
+                        </select></div>
+                </div>
+
+                <div class="base-box filter" id="filter_type">
+                    <div class="base-box-title">Smart Features</div>
+                    <div class="base-box-content">
+                        <ul>
+                            <li>
+                                <label for="vacuum_cleaner">
+                                    <input id="vacuum_cleaner" name="filter_type[]" type="checkbox"
+                                           value="Vacuum Cleaner"> Vacuum Cleaner
+                                </label></li>
+                            <li><label for="camera">
+                                    <input id="camera" name="filter_type[]" type="checkbox" value="Camera"> Camera
+                                </label>
+
+                                <div style="float:right;"># <input type="input" name="camera_number" id="camera_number"
+                                                                   style="width:2em;"/>
+                                </div>
+                            </li>
+                            <li><label for="light">
+                                    <input id="light" name="filter_type[]" type="checkbox" value="Light"> Light
+                                </label>
+
+                                <div style="float:right;"># <input type="input" id="light_number" name="light_number"
+                                                                   style="width:2em;"/>
+                                </div>
+                            </li>
+                            <li><label for="plug">
+                                    <input id="plug" name="filter_type[]" type="checkbox" value="Plug"> Plug
+                                </label></li>
+                            <li><label for="thermostat">
+                                    <input id="thermostat" name="filter_type[]" type="checkbox" value="Thermostat">
+                                    Thermostat
+                                </label></li>
+                            <li><label for="scale">
+                                    <input id="scale" name="filter_type[]" type="checkbox" value="Scale"> Scale
+                                </label></li>
+                            <li><label for="lock">
+                                    <input id="lock" name="filter_type[]" type="checkbox" value="Lock"> Lock
+                                </label></li>
+                            <li><label for="hub">
+                                    <input id="hub" name="filter_type[]" type="checkbox" value="Hub"> Hub
+                                </label></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="base-box filter" id="filter_budget">
+                    <div class="base-box-title">Budget</div>
+                    <div class="base-box-content">
+                        <div id="budget-range"></div>
+                        <input type="text" id="budget" name="budget" readonly
+                               style="border:0; color:#f6931f; font-weight:bold;">
+                    </div>
+                </div>
+                <div class="base-box filter" id="filter_os">
+                    <div class="base-box-title">Operating Systems</div>
+                    <div class="base-box-content">
+                        <ul>
+                            <li>
+                                <label for="Android">
+                                    <input id="Android" name="OS[]" type="checkbox" value="Android"> Android
+                                </label></li>
+                            <li>
+                                <label for="IOS">
+                                    <input id="IOS" name="OS[]" type="checkbox" value="IOS"> IOS
+                                </label></li>
+                            <li>
+                                <label for="MacOSX">
+                                    <input id="MacOSX" name="OS[]" type="checkbox" value="MacOSX"> MacOSX
+                                </label></li>
+                            <li>
+                                <label for="Microsoft">
+                                    <input id="Microsoft" name="OS[]" type="checkbox" value="Microsoft"> Microsoft
+                                </label></li>
+                        </ul>
+                    </div>
+                </div>
+                <div><input type="button" value="Search" id="filter_submit"/></div>
+            </div>
+        </form>
+    </div>
+    <div class="pure-u-3-4">
+        <div class="main-right-content">
+            <?php
+            echo $this->query;
+            ?>
+        </div>
+    </div>
+</div>
+<script src="/js/playbook1.js"></script>

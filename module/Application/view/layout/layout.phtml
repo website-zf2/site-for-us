@@ -1,0 +1,193 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+    <head>
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/img/favico/apple-touch-icon-57x57.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href=/"img/favico/apple-touch-icon-114x114.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/img/favico/apple-touch-icon-72x72.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/img/favico/apple-touch-icon-144x144.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="60x60" href="/img/favico/apple-touch-icon-60x60.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/img/favico/apple-touch-icon-120x120.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/img/favico/apple-touch-icon-76x76.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/img/favico/apple-touch-icon-152x152.png" />
+        <link rel="icon" type="image/png" href="/img/favico/favicon-196x196.png" sizes="196x196" />
+        <link rel="icon" type="image/png" href="/img/favico/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/png" href="/img/favico/favicon_shdb_32x32.ico" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/img/favico/favicon_shdb_16x16.ico" sizes="16x16" />
+        <link rel="icon" type="image/png" href="/img/favico/favicon-128.png" sizes="128x128" />
+        <meta name="application-name" content="&nbsp;"/>
+        <meta name="msapplication-TileColor" content="#FFFFFF" />
+        <meta name="msapplication-TileImage" content="/img/favico/mstile-144x144.png" />
+        <meta name="msapplication-square70x70logo" content="/img/favico/mstile-70x70.png" />
+        <meta name="msapplication-square150x150logo" content="/img/favico/mstile-150x150.png" />
+        <meta name="msapplication-wide310x150logo" content="/img/favico/mstile-310x150.png" />
+        <meta name="msapplication-square310x310logo" content="/img/favico/mstile-310x310.png" />
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('SmartHomeDB - The smart home database.')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Le styles -->
+        <?php echo $this->headLink()
+                        ->prependStylesheet($this->basePath() . '/css/style.css')
+                        ->prependStylesheet($this->basePath() . '/css/grids-responsive-old-ie-min.css', "screen",  'lte IE 8')
+                        ->prependStylesheet($this->basePath() . '/css/grids-responsive-min.css', "screen","gt IE 8")
+                        ->prependStylesheet($this->basePath() . '/css/pure-min.css')
+
+        ?>
+
+
+
+        <!-- Scripts -->
+        <?php echo $this->headScript()
+                ->prependFile($this->basePath() . '/js/jquery-migrate-1.2.1.js')
+                ->prependFile($this->basePath() . '/js/jquery-2.1.1.min.js')
+                ->prependFile($this->basePath() . '/js/config.js');
+//            ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+//            ->prependFile($this->basePath() . '/js/jquery.min.js')
+//            ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+//            ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
+        ; ?>
+
+    </head>
+    <body style="">
+    <div class="header">
+       <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed container">
+          <div class="container row pure-g" style="height: 49px;">
+             <div class="pure-u-6-24">
+                <a><div style="line-height: 49px; float: left;"><img src="/img/logo_smarthomedb.gif"/></div></a>
+                <a style="float: left; margin: 12px 0 0 20px " class="main-icons main-icons-plug"></a>
+             </div>
+             <div class="pure-u-14-24">
+                <form>
+                   <div style="margin-top: 8px; position: relative; width: 450px">
+                      <input type="text" name="" value="" style="height: 20px; padding: 4px 8px; font-size: 15px; width: 430px"/>
+                      <input type="submit" value="" class="main-icons main-icons-search" style="right: 10px; top: 8px; position: absolute;"/>
+                   </div>
+                </form>
+             </div>
+<!--             <div class="pure-u-4-24">-->
+<!--                <div style="line-height: 49px; color: #ffffff; text-align: right">-->
+<!--                   <a style="display: inline-block;">Register</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a style="display: inline-block;">Login</a>-->
+<!--                </div>-->
+<!--             </div>-->
+          </div>
+       </div>
+    </div>
+
+        <div class="content">
+           <div class="nav-tabs" style="">
+              <div class="container row">
+                 <div class="pure-menu pure-menu-open pure-menu-horizontal container">
+                    <ul style="font-size: 0; ">
+                        <li class="shadow-border"></li>
+                       <li class="menu-item">
+                          <a>Analytics</a>
+                           <div class="menu-item-tip-box" style="background-color: red">
+                               Hot
+                           </div>
+                       </li>
+                        <li class="shadow-border"></li>
+                       <li class="menu-item">
+                           <a>Products</a>
+                           <div class="menu-item-tip-box" style="background-color: green">
+                               368
+                           </div>
+                       </li>
+                        <li class="shadow-border"></li>
+                       <li class="menu-item">
+                           <a>Playbooks</a>
+                           <div class="menu-item-tip-box" style="background-color: red">
+                               Hot
+                           </div>
+                       </li>
+                        <li class="shadow-border"></li>
+                       <li class="menu-item">
+                           <a>FAQs</a>
+                       </li>
+                        <li class="shadow-border"></li>
+                       <li class="menu-item" >
+                          <a class="more-item" style="">More&nbsp;&nbsp;&nbsp;</a>
+                           <div class="icon-more" style=""></div>
+                           <div class="nav-tabs children-menus" style="position: absolute; left: -1px; top: 36px; ">
+                               <div class="pure-menu pure-menu-open" style="border: none">
+                                   <ul style="font-size: 0" class="">
+                                       <li class="menu-item"  style="width: 103px;">
+<!--                                           <div class="shadow-border" style="left: 0"></div>-->
+                                           <a>Sub 1</a>
+<!--                                           <div class="shadow-border" style="right: 0"></div>-->
+                                       </li>
+                                       <li class="menu-item" style="width: 103px;">
+<!--                                           <div class="shadow-border" style="left: 0"></div>-->
+                                           <a>Sub 2</a>
+<!--                                           <div class="shadow-border" style="right: 0"></div>-->
+
+                                       </li>
+                                   </ul>
+                               </div>
+
+                           </div>
+                       </li>
+                        <li class="shadow-border"></li>
+
+                        <li class="shadow-border" style="margin-left: 310px;"></li>
+                        <li style="width: 120px; padding: 0 4px">
+                            <div style="position:absolute; bottom: 0; padding: 0 8px;  border: 1px solid #ffffff; border-bottom: none; height: 30px; line-height: 30px; background-color: #0f9f4d">
+                                Login / Register
+                            </div>
+                        </li>
+                        <li class="shadow-border"></li>
+                    </ul>
+                 </div>
+              </div>
+           </div>
+
+
+           <div class="container">
+              <?php echo $this->content; ?>
+           </div>
+        </div> <!-- /container -->
+      <div class="footer container row">
+     </div>
+        <script>
+
+
+            showChildrenMenus = false;
+            $(document).ready(function(){
+                $(".more-item").click(function(){
+                    $(this).parent().addClass("dropdown-menus");
+                    $(this).parent().find(".children-menus").show();
+                    $(this).parent().find(".icon-more").css("background-image", "url('/img/icons/arrow_up_white.png')");
+                    showChildrenMenus = true;
+                    showChildrenMenusInterval = setInterval(function(){
+                        if(!showChildrenMenus)
+                        {
+                            $(".children-menus").hide();
+                            $(".children-menus").parents("li").removeClass("dropdown-menus");
+                            $(".icon-more").css("background-image", "url('/img/icons/arrow_down_white.png')");
+                        }
+                    }, 700);
+                });
+
+                $(".more-item").mouseover(function(){
+                    showChildrenMenus = true;
+                }).mouseout(function(){
+
+                    showChildrenMenus = false;
+                });
+                $(".children-menus").mouseover(function(){
+                    showChildrenMenus = true;
+                }).mouseout(function(){
+                    showChildrenMenus = false;
+                });
+
+
+
+            });
+
+        </script>
+    </body>
+</html>

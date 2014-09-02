@@ -1,0 +1,489 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Bob
+ * Date: 14-8-11
+ * Time: 上午10:55
+ *  render special form 'productBasic'
+ */
+
+
+use Application\Model\DbTable;
+use DHR\Date;
+use Application\Form;
+//add style
+$this->headLink()->prependStylesheet($this->basePath() . '/css/backend.css');
+$this->headLink()->prependStylesheet($this->basePath() . '/css/chosen.css');
+$this->headLink()->prependStylesheet($this->basePath() . '/css/tinyboxstyle.css');
+$this->headLink()->prependStylesheet($this->basePath() . '/css/looksup.css');
+$this->headLink()->prependStylesheet($this->basePath() . '/css/ajaxtabs.css');
+$this->headLink()->prependStylesheet($this->basePath() . '/css/jquery.raty.css');
+
+//add js
+$this->headScript()->prependFile('/js/chosen.jquery.js');
+$this->headScript()->prependFile('/js/function.js');
+$this->headScript()->prependFile('/js/tinybox.mini.js');
+$this->headScript()->prependFile('/js/looksup.js');
+$this->headScript()->prependFile('/js/form.editable.js');
+$this->headScript()->prependFile('/js/ajaxtabs.js');
+$this->headScript()->prependFile('/js/jquery-scrolltofixed-min.js');
+$this->headScript()->prependFile('/js/jquery.raty.js');
+
+$db_product = new DbTable\Product();
+$db_productCompatibility = new DbTable\ProductCompatibility();
+$fn_date = new Date();
+
+$form_fieldsSets = $form->getFieldsets();
+$form_fieldsetsName = array_keys($form_fieldsSets);
+if(isset($this->productInnerId) && $this->productInnerId)
+{
+    $productInnerId = $this->productInnerId;
+    $product = $db_product->getRecordByProductInnerId($productInnerId);
+    $product['tempId'] = $product['ProductInnerId'];
+    $product['productCompatibility'] =array();
+    $compatibilityProduct = $db_productCompatibility->getCompatibilityProduct($productInnerId);
+    if($compatibilityProduct)
+    {
+        foreach($compatibilityProduct as $value)
+            $product['productCompatibility'][]=$value['ToNode'];
+    }
+
+    if(isset($this->read) && $this->read)
+    {
+        if( !empty($product['Launched']))
+        {
+            $differDate = $fn_date->differDate($product['Launched'], "now");
+            $viewData['differDate'] = $differDate;
+        }
+
+    }
+    else
+    {
+        $form->remove("ProductSoftwareScreenShots");
+        $form->remove("ProductVideo");
+        $form->remove("ProductPhoto");
+        $viewData['edit'] = true;
+    }
+
+
+    $product['Dimensions']['height'] = $product['DimensionsHeight'];
+    $product['Dimensions']['width'] = $product['DimensionsWidth'];
+    $product['Dimensions']['depth'] = $product['DimensionsDepth'];
+
+    $weight = $product['Weight'];
+    $product['Weight'] = array("g_weight"=>$weight);
+    //mulit select product category
+    $multiSelects = array("ProductCategory", "PowerSupply", "RegionalAvailability", "Color", "Connectivity", "OSCompatibility");
+    foreach($multiSelects as $select)
+    {
+        if(!empty($product[$select]))
+            $product[$select] = explode("&&&", $product[$select]);
+    }
+
+    //ser populate productValue
+    $productValue = $product;
+    foreach ($form_fieldsetsName as $fieldName)
+        $productValue[$fieldName] = $product;
+
+    $data = $product;
+    $form->populateValues($productValue);
+    $form->remove("ProductSoftwareScreenShots");
+    $form->remove("ProductVideo");
+    $form->remove("ProductPhoto");
+}
+
+$db_photo = new DbTable\Image();
+$productImageType = $db_photo->getImageFileTypeId("ProductImage");
+$productPhotoType = $db_photo->getImageFileTypeId("ProductPhotos");
+$productSoftwarePhotoType  = $db_photo->getImageFileTypeId("ProductSoftwareScreenShots");
+$productImages = false;
+$images = false;
+if(!isset($data))
+    $data = false;
+if(isset($data['ProductInnerId']))
+{
+    $productImages = $db_photo->getImages(null, $data['ProductInnerId']);
+
+    if($productImages)
+        foreach($productImages as $value)
+        {
+            $images[$value['Object']][]=$value;
+        }
+}
+echo $this->form()->openTag($form);
+?>
+
+
+<div class="pure-g row container">
+<div class="pure-u-17-24">
+<?php
+if(!$this->add)
+{
+    ?>
+
+<?php
+}
+else
+{
+    echo "<h1>Add Product</h1>";
+}
+?>
+<?php
+if($this->insert == true)
+{
+    ?>
+    <h1>Add data successfully</h1>
+<?php
+}
+
+
+//get form fieldsets
+$form_fieldsSets  = $form->getFieldsets();
+//get form elements not in fieldsets
+$form_elements = $form->getElements();
+
+//render form
+//render form open tag
+//prepare form
+if (method_exists($form, 'prepare')) {
+    $form->prepare();
+}
+
+//render special form 'productBasic'
+?>
+
+<div class="fieldset-legend title-box-header" style="padding-bottom: 0">
+    <?php echo $this->formRow($form_fieldsSets['ProductBasic']->get("ProductName"));?>
+    <div class="title-box-functions">
+
+        <div style="right: 137px; top: 7px;">
+            <div class="star-raty">
+            </div>
+            <div style="font-size: 11px; text-align: right; font-weight: normal">
+                1,234 reviews
+            </div>
+        </div>
+
+        <div style="border: 1px solid #ffffff; background: #000000; color: #ffffff; height: 22px; line-height: 22px; padding: 4px; top: 9px; right: 14px;">
+            $ 249.00
+        </div>
+    </div>
+</div>
+    <fieldset>
+
+        <div class="fieldset-content">
+
+            <table>
+                <tr>
+                    <td rowspan="2" style="vertical-align: top; width: 255px;" class="product-image-zone" >
+                        <?php
+                        if($this->add)
+                            $productImage = "/files/product/upload_photo.gif";
+                        else if(isset($images[$productImageType][0]['FilePath']))
+                            $productImage = $images[$productImageType][0]['FilePath'];
+                        else
+                            $productImage = "/files/product/upload_photo.gif";
+                        ?>
+                        <img class="adding-Img" style="width: 252px; height: 255px;" src="<?php echo $productImage?>"/>
+
+                        <?php
+                        if(!$this->add && !empty($images[$productImageType]))
+                        {
+                            ?>
+                            <table class="product-short-preview" >
+                                <tr>
+                                    <td>
+                                        <?php
+                                        foreach($images[$productImageType] as $value)
+                                        {
+                                            ?>
+                                            <div class="product-short-photo">
+                                                <img src="<?php echo $value['FilePath']?>">
+                                            </div>
+
+                                        <?php
+                                        }
+                                        ?>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        <?php
+                        }
+                        ?>
+                    </td>
+                    <td>
+                        <div style="float: right; margin-bottom: 5px;">
+                            <button tabindex="-1">Compare</button>
+
+                            <button tabindex="-1" onclick=" location.href='/product/index?id=<?php echo $data['ProductInnerId']?>;' ">Improve Data</button>
+                            <button tabindex="-1">Share</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+
+                    <td  style="vertical-align: top;">
+                        <table class="productBasic">
+                            <?php echo $this->formRow($form_fieldsSets['ProductBasic']->get("Launched"));?>
+                            <?php echo $this->formRow($form_fieldsSets['ProductBasic']->get("ProductCategory"));?>
+                            <?php echo $this->formRow($form_fieldsSets['ProductBasic']->get("Status"));?>
+                            <?php
+                            $features = array("CloudFocused"=>"c", "RemoteAccess"=>"ra", "EnergyEfficient"=>"se", "ImproveHealth"=>"ih", "ImproveSafety"=>"is");
+                            $showFeatures = false;
+                            foreach($features as $key=>$feature)
+                            {
+                                if($data[$key]==1)
+                                {
+                                    $showFeatures = true;
+                                    break;
+                                }
+                            }
+                            if($showFeatures)
+                            {
+                                ?>
+                                <tr class="form-element-show product-preview-list">
+                                    <td class="form-label">Features:</td>
+                                    <td class="form-input">
+                                        <?php
+                                        foreach($features as $key=>$feature)
+                                        {
+                                            if($data[$key]==1)
+                                                echo "<span class='product-icons-feature-$feature'></span>";
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php
+                            }
+                            ?>
+                            <?php
+                            if(!empty($data['OSCompatibility']))
+                            {
+                                ?>
+                                <tr class="form-element-show product-preview-list">
+                                    <td class="form-label">Software:</td>
+                                    <td class="form-input">
+                                        <?php
+                                        //$data['OSCompatibility'] = explode("&&&", $data['OSCompatibility']);
+                                        foreach($data['OSCompatibility'] as $value)
+                                            echo "<span class='product-icons-os-$value'></span>";
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php
+                            }
+                            ?>
+                            <?php
+                            if(!empty($data['Connectivity']))
+                            {
+
+                                ?>
+                                <tr class="form-element-show product-preview-list">
+                                    <td class="form-label">Connectivity:</td>
+                                    <td class="form-input">
+                                        <?php
+                                      //  $data['Connectivity'] = explode("&&&", $data['Connectivity']);
+                                        foreach($data['Connectivity'] as $value)
+                                            echo "<span class='product-icons-connectivity-$value'></span>";
+                                        ?>
+                                    </td>
+
+                                </tr>
+                            <?php
+                            }
+                            ?>
+                            <?php
+                            if(!empty($data['PowerSupply']))
+                            {
+                                ?>
+                                <tr class="form-element-show product-preview-list">
+                                    <td class="form-label">Power:</td>
+                                    <td class="form-input">
+                                        <?php
+                                        foreach($data['PowerSupply'] as $value)
+                                        {
+                                            if($value==1)
+                                                echo "<span class='product-icons-power-cable'></span>";
+                                            else if($value >1)
+                                            {
+                                                echo "<span class='product-icons-power-battery'></span>";
+                                                break;
+                                            }
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php
+                            }
+                            ?>
+                            <?php echo $this->formRow($form_fieldsSets['ProductBasic']->get("Website"));?>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="fieldset-bottom">
+        </div>
+    </fieldset>
+
+</div>
+<div class="pure-u-1-24">
+
+</div>
+<div class="pure-u-24-24">
+    <ul id="countrytabs" class="shadetabs" style="margin-top: 10px; padding: 7px 0;">
+        <li><a tabindex="-1" href="#" rel="#countrydivcontainer" >Pricewatch <span><b>(8)</b></span></a></li>
+        <li><a tabindex="-1" href="#" rel="#default"  class="selected">Specifications</a></li>
+        <li><a tabindex="-1" href="#" rel="#countrydivcontainer" >Reviews <span><b>(123)</b></span></a></li>
+        <li><a tabindex="-1" href="#" rel="#countrydivcontainer" >Compatibilities Playbook <span><b>(20)</b></span></a></li>
+        <li><a tabindex="-1" href="#" rel="#countrydivcontainer" >FAQs <span><b>(8)</b></span></a></li>
+        <li><a tabindex="-1" href="#" rel="#countrydivcontainer" >SmartTalk <span><b>(2)</b></span></a></li>
+        <li>
+            <a tabindex="-1" href="#" rel="#countrydivcontainer" style="padding-right: 57px;">
+                <span style="position: absolute; display: inline-block; font-size: 13px;">More</span>
+                <span class="icon-more-gray" style="top: 4px; left: 51px"></span>
+            </a>
+        </li>
+    </ul>
+</div>
+</div>
+<div style="border-top:1px solid #cccccc; background-color: #f1f1f1; ">
+    <div id="countrydivcontainer" style="margin: 30px;">
+        <div class="pure-g row container">
+
+
+
+<script>
+    $(document).ready(function(){
+        $('.star-raty').raty({ readOnly: true, score: 2.5 ,
+            starHalf    : '/img/icons/icon_halfstar.gif',                                // The name of the half star image.
+            starOff     : '/img/icons/icon_emptystar.gif',                                 // Name of the star image off.
+            starOn      : '/img/icons/icon_fullstar.gif'
+        });
+
+        $(".product-short-photo").hover(function(){
+            $(".product-short-photo").css("border-color", "#dddddd");
+            $(this).css("border-color", "#38a4ff");
+            var img_src= $(this).children("img").attr("src");
+            $(".adding-Img").attr("src", img_src);
+        });
+    });
+
+    $(".adding-Img").click(function(){
+        var url = "/photo/index?outKeyId="+$("#tempId").val()+"&type=ProductImage&width=255&height=255";
+        TINY.box.show(url, 1, 800, 580, 1);
+    });
+    var differDate = "<?php echo $this->differDate?>";
+    function showProductCompatibility()
+    {
+        if($(':input[name="ProductFeature[NoDependencyHardWare]"]').is(':checked')==true)
+        {
+            $('ul[id="ProductFeatureproductCompatibility"]').parents("tr:first").hide();
+
+            $('.form-element-show[element-name="ProductFeatureproductCompatibility"]').hide();
+        }
+        else
+        {
+            $('ul[id="ProductFeatureproductCompatibility"]').parents("tr:first").show();
+            $('.form-element-show[element-name="ProductFeatureproductCompatibility"]').show();
+        }
+    }
+
+    function showPowerSupply()
+    {
+        $(":input[name='ProductFeature[PowerCableLength]']").parents("tr:first").hide();
+        $(":input[name='ProductFeature[BatteryLifeTime]']").parents("tr:first").hide();
+        $(":input[name='ProductFeature[PowerSupply][]']").children("option:selected").each(function(){
+            if($(this).text().indexOf("Battery")!=-1)
+                $(":input[name='ProductFeature[BatteryLifeTime]']").parents("tr:first").show();
+            if($(this).text().indexOf("Cable/Adapter")!=-1)
+                $(":input[name='ProductFeature[PowerCableLength]']").parents("tr:first").show();
+        });
+    }
+
+    $(window).load(function(){
+        showAndHide("ProductFeature[API]", new Array("ProductFeature[APIName]", "ProductFeature[APIWebsite]"));
+        showProductCompatibility();
+        $('ul[id="ProductFeatureproductCompatibility"]').parents("tr:first").hide();
+        showPowerSupply();
+        $(":input[name='ProductFeature[PowerCableLength]']").parents("tr:first").hide();
+        $(":input[name='ProductFeature[BatteryLifeTime]']").parents("tr:first").hide();
+        $(":input[name='ProductFeature[APIName]']").parents("tr:first").hide();
+        $(":input[name='ProductFeature[APIWebsite]']").parents("tr:first").hide();
+    });
+
+    $(document).ready(function(){
+        <?php
+           if( true || $this->read)
+           {
+       ?>
+        $("#productRegionalAvailability").scrollToFixed({ marginTop: 100  });
+        <?php
+            }
+        ?>
+        $(".title-box-header").scrollToFixed({ marginTop: 50 });
+
+
+
+        $(":input[name='ProductFeature[PowerSupply][]']").change(function(){
+            showPowerSupply();
+        });
+
+        $(':input[name="ProductFeature[API]"]').click(function(){
+            showAndHide("ProductFeature[API]", new Array("ProductFeature[APIName]", "ProductFeature[APIWebsite]"));
+        });
+
+        $(':input[name="ProductFeature[NoDependencyHardWare]"]').click(function(){
+            showProductCompatibility();
+        });
+
+        <?php
+            if($this->read)
+            {
+        ?>
+
+        hiddenForm($("form"));
+        $('#edit_button').show();
+        <?php
+            }
+            else if($this->edit)
+            {
+        ?>
+        $('#save_button').show();
+        $('#cancel_button').show();
+        <?php
+
+            }
+            else
+            {
+        ?>
+        $('#save_button').show();
+        $(":input[name='ProductBasic[ProductName]']").focus();
+
+        <?php
+            }
+        ?>
+
+        $("#save_button").click(function(){
+            $('#product').submit();
+            return true;
+        });
+        $(document).on('dblclick', '.form-element-show',function(){
+            showElement($(this));
+            $('#save_button').show();
+            $('#cancel_button').show();
+            $('#edit_button').hide();
+        });
+
+        $(".fieldset-update").click(function(){
+            showFieldset($(this).parents("fieldset"));
+            showAndHide("ProductFeature[API]", new Array("ProductFeature[APIName]", "ProductFeature[APIWebsite]"));
+            showProductCompatibility();
+            showPowerSupply();
+            $('#save_button').show();
+            $('#cancel_button').show();
+            $('#edit_button').hide();
+        });
+    });
+</script>

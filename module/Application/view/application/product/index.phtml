@@ -1,0 +1,55 @@
+
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Bob
+ * Date: 14-6-23
+ * Time: 下午4:46
+ */
+use Application\Model\DbTable;
+?>
+<?php
+        //echo $this->partial("/application/product/productbasic.phtml", array("form_fieldsSets"=>$form_fieldsSets, "images"=>$images, "productImageType"=>$productImageType, 'data'=>$data, 'add'=>$this->add));
+        echo $this->render("/application/product/productbasic.phtml" );
+?>
+<div class="pure-u-17-24">
+    <?php
+    $form_fieldsSets = $form->getFieldsets();
+    $form_elements = $form->getElements();
+    //render form fieldset
+    foreach($form_fieldsSets as $fieldSetName =>$fieldSet )
+    {
+        if($fieldSetName!="ProductBasic" && $fieldSetName!='productRegionalAvailability')
+            echo $this->formCollection($fieldSet);
+    }
+
+    //render form element not in fieldsets
+    foreach($form_elements as $elementName => $element)
+        echo  $this->formRow($element);
+
+    //render form close tag
+
+    ?>
+</div>
+<div class="edit-save-box">
+    <a href="/product/index?id=<?php echo $data['ProductInnerId']?>">
+        <div class="btn btn-blue big"  id="edit_button" style="letter-spacing: normal; display: none">Edit</div>
+    </a>
+    <button class="btn btn-blue big" id="save_button" style="display: none">Save</button>
+
+    <a href="/product/index?read=true&id=<?php echo $data['ProductInnerId']?>">
+        <button class="btn btn-blue big" id="cancel_button" style="display: none">Cancel</button>
+    </a>
+</div>
+<div class="pure-u-1-24"></div>
+<div class="pure-u-6-24">
+<?php
+    echo $this->formCollection($form_fieldsSets['productRegionalAvailability']);
+?>
+</div>
+
+<?php
+    echo $this->render("/application/product/productframeworkend.phtml" );
+?>
+
+

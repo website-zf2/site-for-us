@@ -1,0 +1,28 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Bob
+ * Date: 14-6-24
+ * Time: 上午11:33
+ */
+$attributes = $element->getAttributes();
+$message = $element->getMessages();
+$options = $element->getOptions();
+$values = $element->getValue();
+if(!empty($values) && is_string($values))
+    $values = explode("&&&", $values);
+$valueOptions = $options['value_options'];
+?>
+<li class="multi-checkbox-li">
+
+   <?php
+      foreach($valueOptions as $value =>$option)
+      {
+         $checked = "";
+         if(!empty($values) && in_array($value, $values))
+            $checked = "checked";
+         echo "<div class='checkbox'><input class='multi-checkbox-item' type='checkbox' ".$checked." value='".$value."' name='".$attributes['name']."[]'/><span class='multi-checkbox-value'>$option</span></div>";
+      }
+   ?>
+
+</li>

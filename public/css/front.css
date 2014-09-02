@@ -1,0 +1,29 @@
+/*
+this is the style file for front side.
+*/
+.base-box-title{
+    padding: 0.3em;
+    font-size: 1.5em;
+    font-weight: bold;
+    background: -webkit-gradient(linear,center top,center bottom,from(#EFEFEF), to(#BDBDBD));
+    border-bottom: 0.1em solid #000000;
+}
+.base-box{
+    margin-bottom: 1.5em;
+    border: 0.1em solid #000000;
+}
+.base-box-content{
+    margin:1.5em;
+}
+.filter-input{
+    height:3em;
+}
+ul{
+    list-style: none;
+}
+.base-box-content ul{
+    padding:0em;
+}
+.base-box-content ul li{
+    margin:0.5em 0em;
+}
