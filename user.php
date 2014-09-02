@@ -4,7 +4,6 @@
 	用户单点登录
 	Author　Ray Zheng 201307
 */
-ddd
 date_default_timezone_set('Asia/Shanghai');
 define("SOAP_CLIENT_BASEDIR", "soapclient");
 require_once (SOAP_CLIENT_BASEDIR.'/SforceEnterpriseClient.php');
